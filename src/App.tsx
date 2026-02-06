@@ -2,19 +2,34 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AppShell from './Pages/AppShell';
 import BlockEditor from './Pages/BlockEditor';
 import AuthPage from './Pages/AuthPage';
+import ProtectedRoute from './Pages/ProtectedRoute';
+import AuthRoute from './Pages/AuthRoute';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Default entry → Auth */}
+        {/* Default */}
         <Route path="/" element={<Navigate to="/auth" replace />} />
 
-        {/* Auth */}
-        <Route path="/auth" element={<AuthPage />} />
+        {/* AUTH PAGE (logged-in users blocked) */}
+        <Route
+          path="/auth"
+          element={
+            <AuthRoute>
+              <AuthPage />
+            </AuthRoute>
+          }
+        />
 
-        {/* Editor layout */}
-        <Route element={<AppShell />}>
+        {/* EDITOR (logged-out users blocked) */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppShell />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/page/:pageId" element={<BlockEditor />} />
         </Route>
       </Routes>
