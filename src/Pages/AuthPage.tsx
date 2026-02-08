@@ -44,7 +44,7 @@ function AuthPage() {
 
   console.log('handle submit was fired', handleSubmit);
 
-  // 🆕 SIGNUP → AUTO SIGNIN → EDITOR
+  // SIGNUP → AUTO SIGNIN → EDITOR
   const signup = async () => {
     const res = await fetch('http://localhost:3000/api/auth/signup', {
       method: 'POST',
@@ -65,11 +65,11 @@ function AuthPage() {
       return;
     }
 
-    // ✅ AUTO LOGIN AFTER SIGNUP
+    //AUTO LOGIN AFTER SIGNUP
     await signin();
   };
 
-  // 🔐 SIGNIN → EDITOR
+  //SIGNIN → EDITOR
   const signin = async () => {
     const res = await fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
@@ -88,7 +88,7 @@ function AuthPage() {
       return;
     }
 
-    // ✅ Cookie is set by backend
+    //Cookie is set by backend
     navigate('/page/new', { replace: true });
   };
 

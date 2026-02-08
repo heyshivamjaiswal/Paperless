@@ -6,12 +6,13 @@ export default function AppShell() {
   const open = useOpen((s) => s.open);
 
   return (
-    <div className="h-screen w-screen flex bg-[#0f0f0f]">
-      {/* Sidebar */}
+    <div className="h-screen w-screen flex bg-[#0f0f0f] overflow-hidden">
+      {/* Sidebar - Fixed overflow to prevent scrollbar flash */}
       <div
         className={`
-          h-full transition-all duration-300 ease-in-out
+          h-full transition-all duration-300 ease-in-out flex-shrink-0
           ${open ? 'w-64 bg-neutral-900 border-r border-white/10' : 'w-14'}
+          overflow-hidden
         `}
       >
         <Sidebar />
