@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/ReusableComponent/Input';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
@@ -31,10 +32,8 @@ function AuthPage() {
     }));
   };
 
-  // 🔑 FORM SUBMIT HANDLER
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-
     if (mode === 'signup') {
       await signup();
     } else {
@@ -42,9 +41,6 @@ function AuthPage() {
     }
   };
 
-  console.log('handle submit was fired', handleSubmit);
-
-  // SIGNUP → AUTO SIGNIN → EDITOR
   const signup = async () => {
     const res = await fetch('http://localhost:3000/api/auth/signup', {
       method: 'POST',
@@ -65,11 +61,9 @@ function AuthPage() {
       return;
     }
 
-    //AUTO LOGIN AFTER SIGNUP
     await signin();
   };
 
-  //SIGNIN → EDITOR
   const signin = async () => {
     const res = await fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
@@ -88,160 +82,218 @@ function AuthPage() {
       return;
     }
 
-    //Cookie is set by backend
     navigate('/page/new', { replace: true });
   };
 
   return (
-    <div className="min-h-screen w-full bg-neutral-100 flex items-center justify-center">
-      <form
+    <div className="min-h-screen w-full bg-black flex items-center justify-center p-4">
+      <motion.form
         onSubmit={handleSubmit}
-        className="w-[420px] bg-white rounded-2xl shadow-xl px-8 py-10 flex flex-col gap-6"
+        className="w-full max-w-md bg-[#1c1c1e] rounded-3xl 
+                 border border-white/[0.08] shadow-2xl px-8 py-10 flex flex-col gap-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
         {/* Header */}
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-semibold text-neutral-900">
+        <motion.div
+          className="text-center space-y-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <h1 className="text-3xl font-semibold text-white">
             {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
           </h1>
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-white/50">
             {mode === 'signin'
-              ? 'Sign in to continue to your account'
-              : 'Sign up to get started with your account'}
+              ? 'Sign in to continue to your workspace'
+              : 'Sign up to get started with your workspace'}
           </p>
-        </div>
+        </motion.div>
 
         {/* Tabs */}
-        <div className="flex rounded-lg bg-neutral-100 p-1">
-          <button
+        <motion.div
+          className="flex rounded-xl bg-white/[0.06] p-1 border border-white/[0.06]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+        >
+          <motion.button
             type="button"
             onClick={() => setMode('signin')}
-            className={`flex-1 py-2 text-sm rounded-md transition
-              ${
-                mode === 'signin'
-                  ? 'bg-white shadow text-neutral-900'
-                  : 'text-neutral-500 hover:text-neutral-900'
-              }`}
+            className={`flex-1 py-2.5 text-sm rounded-lg transition-all font-medium relative
+              ${mode === 'signin' ? 'text-white' : 'text-white/50 hover:text-white/70'}`}
+            whileTap={{ scale: 0.98 }}
           >
-            Sign In
-          </button>
+            {mode === 'signin' && (
+              <motion.div
+                className="absolute inset-0 bg-white/[0.12] rounded-lg"
+                layoutId="activeTab"
+                transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+              />
+            )}
+            <span className="relative z-10">Sign In</span>
+          </motion.button>
 
-          <button
+          <motion.button
             type="button"
             onClick={() => setMode('signup')}
-            className={`flex-1 py-2 text-sm rounded-md transition
-              ${
-                mode === 'signup'
-                  ? 'bg-white shadow text-neutral-900'
-                  : 'text-neutral-500 hover:text-neutral-900'
-              }`}
+            className={`flex-1 py-2.5 text-sm rounded-lg transition-all font-medium relative
+              ${mode === 'signup' ? 'text-white' : 'text-white/50 hover:text-white/70'}`}
+            whileTap={{ scale: 0.98 }}
           >
-            Sign Up
-          </button>
-        </div>
+            {mode === 'signup' && (
+              <motion.div
+                className="absolute inset-0 bg-white/[0.12] rounded-lg"
+                layoutId="activeTab"
+                transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+              />
+            )}
+            <span className="relative z-10">Sign Up</span>
+          </motion.button>
+        </motion.div>
 
         {/* Form Fields */}
-        <div className="flex flex-col gap-4">
-          {mode === 'signup' && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={mode}
+            className="flex flex-col gap-4"
+            initial={{ opacity: 0, x: mode === 'signup' ? 20 : -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: mode === 'signup' ? -20 : 20 }}
+            transition={{ duration: 0.2 }}
+          >
+            {mode === 'signup' && (
+              <Input
+                name="fullName"
+                label="Full Name"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleChange}
+                className="bg-white/[0.06] border-white/[0.08] text-white placeholder-white/30
+                         focus:border-white/20 focus:bg-white/[0.08]"
+              />
+            )}
+
             <Input
-              name="fullName"
-              label="Full Name"
-              placeholder="Enter your full name"
-              value={formData.fullName}
+              name="username"
+              label="Username"
+              placeholder="Enter your username"
+              value={formData.username}
               onChange={handleChange}
+              className="bg-white/[0.06] border-white/[0.08] text-white placeholder-white/30
+                       focus:border-white/20 focus:bg-white/[0.08]"
             />
-          )}
 
-          <Input
-            name="username"
-            label="Username"
-            placeholder="Enter your username"
-            value={formData.username}
-            onChange={handleChange}
-          />
+            {mode === 'signup' && (
+              <Input
+                name="email"
+                label="Email"
+                placeholder="john@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                className="bg-white/[0.06] border-white/[0.08] text-white placeholder-white/30
+                         focus:border-white/20 focus:bg-white/[0.08]"
+              />
+            )}
 
-          {mode === 'signup' && (
-            <Input
-              name="email"
-              label="Email"
-              placeholder="john@gmail.com"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          )}
-
-          {/* Password */}
-          <div className="relative">
-            <Input
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              label="Password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((p) => !p)}
-              className="absolute right-3 top-[42px] text-neutral-400 hover:text-neutral-700"
-            >
-              {showPassword ? (
-                <AiFillEyeInvisible size={18} />
-              ) : (
-                <AiFillEye size={18} />
-              )}
-            </button>
-          </div>
-
-          {/* Confirm Password */}
-          {mode === 'signup' && (
+            {/* Password */}
             <div className="relative">
               <Input
-                name="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
-                label="Confirm Password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                label="Password"
                 placeholder="••••••••"
-                value={formData.confirmPassword}
+                value={formData.password}
                 onChange={handleChange}
+                className="bg-white/[0.06] border-white/[0.08] text-white placeholder-white/30
+                         focus:border-white/20 focus:bg-white/[0.08] pr-12"
               />
-              <button
+              <motion.button
                 type="button"
-                onClick={() => setShowConfirmPassword((p) => !p)}
-                className="absolute right-3 top-[42px] text-neutral-400 hover:text-neutral-700"
+                onClick={() => setShowPassword((p) => !p)}
+                className="absolute right-3 top-[42px] text-white/40 hover:text-white/70"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
-                {showConfirmPassword ? (
-                  <AiFillEyeInvisible size={18} />
+                {showPassword ? (
+                  <AiFillEyeInvisible size={20} />
                 ) : (
-                  <AiFillEye size={18} />
+                  <AiFillEye size={20} />
                 )}
-              </button>
-
-              {passwordMismatch && (
-                <p className="text-xs text-red-500 mt-1">
-                  Passwords do not match
-                </p>
-              )}
+              </motion.button>
             </div>
-          )}
-        </div>
+
+            {/* Confirm Password */}
+            {mode === 'signup' && (
+              <div className="relative">
+                <Input
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  label="Confirm Password"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder-white/30
+                           focus:border-white/20 focus:bg-white/[0.08] pr-12"
+                />
+                <motion.button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((p) => !p)}
+                  className="absolute right-3 top-[42px] text-white/40 hover:text-white/70"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  {showConfirmPassword ? (
+                    <AiFillEyeInvisible size={20} />
+                  ) : (
+                    <AiFillEye size={20} />
+                  )}
+                </motion.button>
+
+                <AnimatePresence>
+                  {passwordMismatch && (
+                    <motion.p
+                      className="text-xs text-red-400 mt-1.5"
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                    >
+                      Passwords do not match
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {/* Submit */}
-        <button
+        <motion.button
           type="submit"
           disabled={passwordMismatch}
-          className="w-full rounded-lg bg-black text-white py-2.5 text-sm font-medium
-            hover:bg-neutral-800 transition
-            disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-xl bg-white text-black py-3 text-sm font-semibold
+                   hover:bg-white/90 transition-colors
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+          whileHover={{ scale: passwordMismatch ? 1 : 1.02 }}
+          whileTap={{ scale: passwordMismatch ? 1 : 0.98 }}
         >
           {mode === 'signin' ? 'Sign In' : 'Create Account'}
-        </button>
+        </motion.button>
 
         {/* Footer */}
-        <p className="text-xs text-center text-neutral-500">
+        <motion.p
+          className="text-xs text-center text-white/40"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           {mode === 'signin'
             ? "Don't have an account? Sign up instead."
             : 'Already have an account? Sign in instead.'}
-        </p>
-      </form>
+        </motion.p>
+      </motion.form>
     </div>
   );
 }

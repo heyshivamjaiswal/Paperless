@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from 'framer-motion';
 import { TiHome } from 'react-icons/ti';
 import { GiBrain } from 'react-icons/gi';
 import { SlCalender } from 'react-icons/sl';
@@ -8,12 +9,13 @@ function SidebarFooter() {
   const open = useOpen((s) => s.open);
 
   return (
-    <div
-      className={`p-2 flex flex-col gap-4 transition-all ${
-        open
-          ? 'items-start border-t border-neutral-800'
-          : 'items-center border-none'
+    <motion.div
+      className={`flex-shrink-0 p-3 flex flex-col gap-1 transition-all ${
+        open ? 'items-stretch border-t border-white/[0.08]' : 'items-center'
       }`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
     >
       <Icon icon={<TiHome className="text-xl" />} label="Home" open={open} />
       <Icon icon={<GiBrain className="text-xl" />} label="AI" open={open} />
@@ -22,7 +24,7 @@ function SidebarFooter() {
         label="Schedules"
         open={open}
       />
-    </div>
+    </motion.div>
   );
 }
 
@@ -36,11 +38,31 @@ function Icon({
   open: boolean;
 }) {
   return (
-    <div className="relative group flex items-center gap-3 text-neutral-400 hover:text-white cursor-pointer">
-      {icon}
-      {open && <span className="text-xs">{label}</span>}
+    <motion.div
+      className="relative group flex items-center gap-3 text-white/50 
+                 hover:text-white cursor-pointer px-2 py-2 rounded-lg 
+                 hover:bg-white/[0.08] transition-all"
+      whileHover={{ x: 2 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <span className="relative z-10">{icon}</span>
+
+      <AnimatePresence>
+        {open && (
+          <motion.span
+            className="text-[13px] font-medium relative z-10"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.15 }}
+          >
+            {label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+
       {!open && <Tooltip text={label} />}
-    </div>
+    </motion.div>
   );
 }
 
