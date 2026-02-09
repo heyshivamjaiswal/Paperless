@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AppShell from './Pages/AppShell';
 import BlockEditor from './Pages/BlockEditor';
+import HomePage from './Pages/HomePage';
+import SchedulePage from './Pages/SchedulePage';
 import AuthPage from './Pages/AuthPage';
 import ProtectedRoute from './Pages/ProtectedRoute';
 import AuthRoute from './Pages/AuthRoute';
@@ -9,8 +11,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Default */}
-        <Route path="/" element={<Navigate to="/auth" replace />} />
+        {/* Default - redirect to home for logged in users */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         {/* AUTH PAGE (logged-in users blocked) */}
         <Route
@@ -22,7 +24,7 @@ export default function App() {
           }
         />
 
-        {/* EDITOR (logged-out users blocked) */}
+        {/* PROTECTED ROUTES (logged-out users blocked) */}
         <Route
           element={
             <ProtectedRoute>
@@ -30,6 +32,13 @@ export default function App() {
             </ProtectedRoute>
           }
         >
+          {/* Home Page - Document Grid */}
+          <Route path="/home" element={<HomePage />} />
+
+          {/* Schedule Page - Calendar */}
+          <Route path="/schedule" element={<SchedulePage />} />
+
+          {/* Editor Page */}
           <Route path="/page/:pageId" element={<BlockEditor />} />
         </Route>
       </Routes>

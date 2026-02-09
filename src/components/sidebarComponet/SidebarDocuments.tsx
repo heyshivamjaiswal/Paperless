@@ -6,7 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePagesStore } from '../../store/pageStore';
 import { useOpen } from '../../store/sidebarCollapse';
 
-function SidebarDocuments() {
+// Add a prop to track if menu is open
+function SidebarDocuments({ isMenuOpen }: { isMenuOpen?: boolean }) {
   const open = useOpen((s) => s.open);
   const navigate = useNavigate();
   const { pageId } = useParams<{ pageId: string }>();
@@ -95,10 +96,20 @@ function SidebarDocuments() {
 
   return (
     <motion.div
-      className="flex-1 flex flex-col min-h-0"
+      className="flex-1 flex flex-col min-h-0 relative z-10"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
+      animate={{
+        opacity: 1,
+        // Smooth push down when menu is open
+        marginTop: isMenuOpen ? 100 : 0,
+      }}
+      transition={{
+        opacity: { duration: 0.2 },
+        marginTop: {
+          duration: 0.35,
+          ease: [0.4, 0.0, 0.2, 1], // Smooth easing curve
+        },
+      }}
     >
       {/* Header */}
       <motion.div

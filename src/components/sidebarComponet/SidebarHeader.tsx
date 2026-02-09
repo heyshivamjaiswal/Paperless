@@ -2,11 +2,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GoSidebarCollapse, GoSidebarExpand } from 'react-icons/go';
 import { useOpen } from '../../store/sidebarCollapse';
 import Tooltip from '../helperComponent/Tooltip';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthCheck } from '../../hooks/UseAuthCheck';
 
-function SidebarHeader() {
+interface SidebarHeaderProps {
+  onMenuToggle?: (isOpen: boolean) => void;
+}
+
+function SidebarHeader({ onMenuToggle }: SidebarHeaderProps) {
   const toggleBtn = useOpen((s) => s.toggle);
   const open = useOpen((s) => s.open);
   const navigate = useNavigate();
@@ -17,6 +21,11 @@ function SidebarHeader() {
   const displaySource = user?.username || user?.email || '';
   const firstLetter = displaySource.charAt(0)?.toUpperCase() || 'U';
   const displayName = user?.username || user?.email?.split('@')[0] || 'User';
+
+  // Notify parent when menu opens/closes
+  useEffect(() => {
+    onMenuToggle?.(menuOpen);
+  }, [menuOpen, onMenuToggle]);
 
   const handleLogout = async () => {
     try {
@@ -31,7 +40,7 @@ function SidebarHeader() {
   };
 
   return (
-    <div className="flex-shrink-0 px-3 py-3">
+    <div className="flex-shrink-0 px-3 py-3 relative z-50">
       <motion.div
         className={`flex items-center transition-all ${
           open ? 'justify-between' : 'justify-center'
@@ -73,7 +82,7 @@ function SidebarHeader() {
                 onClick={() => setMenuOpen((p) => !p)}
                 className="w-9 h-9 rounded-full bg-white/10
                        text-white flex items-center justify-center font-semibold text-sm
-                       hover:bg-white/[0.15] transition-colors"
+                       hover:bg-white/[0.15] transition-colors relative z-50"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="User menu"
@@ -85,23 +94,24 @@ function SidebarHeader() {
               <AnimatePresence>
                 {menuOpen && (
                   <>
-                    {/* Backdrop */}
+                    {/* Backdrop - covers entire screen */}
                     <motion.div
-                      className="fixed inset-0 z-40"
+                      className="fixed inset-0 z-[100]"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onClick={() => setMenuOpen(false)}
                     />
 
-                    {/* Menu */}
+                    {/* Menu - highest z-index */}
                     <motion.div
                       className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#2c2c2e] 
-                               border border-white/[0.08] shadow-2xl z-50 overflow-hidden"
+                               border border-white/[0.08] shadow-2xl z-[101] overflow-hidden"
                       initial={{ opacity: 0, y: -8, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -8, scale: 0.96 }}
                       transition={{ duration: 0.15, ease: 'easeOut' }}
+                      style={{ position: 'absolute' }}
                     >
                       {/* User Info */}
                       <div className="px-4 py-3 border-b border-white/[0.08]">
