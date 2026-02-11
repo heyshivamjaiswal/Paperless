@@ -3,6 +3,7 @@ import AppShell from './Pages/AppShell';
 import BlockEditor from './Pages/BlockEditor';
 import HomePage from './Pages/HomePage';
 import SchedulePage from './Pages/SchedulePage';
+import AIChatPage from './Pages/AiChatPage';
 import AuthPage from './Pages/AuthPage';
 import ProtectedRoute from './Pages/ProtectedRoute';
 import AuthRoute from './Pages/AuthRoute';
@@ -37,6 +38,9 @@ export default function App() {
 
           {/* Schedule Page - Calendar */}
           <Route path="/schedule" element={<SchedulePage />} />
+
+          {/* AI Chat Page - Study Assistant */}
+          <Route path="/ai-chat" element={<AIChatPage />} />
 
           {/* Editor Page */}
           <Route path="/page/:pageId" element={<BlockEditor />} />

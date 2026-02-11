@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/ReusableComponent/Input';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 function AuthPage() {
   const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ function AuthPage() {
   };
 
   const signup = async () => {
-    const res = await fetch('http://localhost:3000/api/auth/signup', {
+    const res = await fetch(`${API_BASE}/api/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -65,7 +67,7 @@ function AuthPage() {
   };
 
   const signin = async () => {
-    const res = await fetch('http://localhost:3000/api/auth/login', {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -82,7 +84,8 @@ function AuthPage() {
       return;
     }
 
-    navigate('/page/new', { replace: true });
+    // FIXED: Redirect to /home instead of /page/new
+    navigate('/home', { replace: true });
   };
 
   return (

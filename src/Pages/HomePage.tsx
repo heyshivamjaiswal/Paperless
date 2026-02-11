@@ -4,12 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePagesStore } from '../store/pageStore';
 import { HiDocumentAdd, HiOutlineDocument } from 'react-icons/hi';
 
-interface Document {
-  _id: string;
-  title: string;
-  content: any[];
-  updatedAt?: string;
-}
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function HomePage() {
   const navigate = useNavigate();
@@ -21,7 +16,7 @@ function HomePage() {
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/docs', {
+        const res = await fetch(`${API_BASE}/api/docs`, {
           credentials: 'include',
         });
         if (!res.ok) {
@@ -41,7 +36,7 @@ function HomePage() {
 
   const createDoc = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/docs', {
+      const res = await fetch(`${API_BASE}/api/docs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

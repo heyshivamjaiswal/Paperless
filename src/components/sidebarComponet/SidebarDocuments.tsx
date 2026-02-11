@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePagesStore } from '../../store/pageStore';
 import { useOpen } from '../../store/sidebarCollapse';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 // Add a prop to track if menu is open
 function SidebarDocuments({ isMenuOpen }: { isMenuOpen?: boolean }) {
   const open = useOpen((s) => s.open);
@@ -22,7 +24,7 @@ function SidebarDocuments({ isMenuOpen }: { isMenuOpen?: boolean }) {
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/docs', {
+        const res = await fetch(`${API_BASE}/api/docs`, {
           credentials: 'include',
         });
         if (!res.ok) return;
@@ -45,7 +47,7 @@ function SidebarDocuments({ isMenuOpen }: { isMenuOpen?: boolean }) {
 
   const createDoc = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/docs', {
+      const res = await fetch(`${API_BASE}/api/docs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -73,7 +75,7 @@ function SidebarDocuments({ isMenuOpen }: { isMenuOpen?: boolean }) {
   const deleteDoc = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      const res = await fetch(`http://localhost:3000/api/docs/${id}`, {
+      const res = await fetch(`${API_BASE}/api/docs/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

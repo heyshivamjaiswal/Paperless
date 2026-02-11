@@ -20,9 +20,9 @@ export default function AuthRoute({ children }: Props) {
     );
   }
 
-  // Redirect to app if already authenticated
+  // Redirect to HOME (not /page/new) if already authenticated
   if (authenticated) {
-    return <Navigate to="/page/new" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return <>{children}</>;

@@ -33,8 +33,8 @@ function SidebarFooter() {
         icon={<GiBrain className="text-xl" />}
         label="AI"
         open={open}
-        onClick={() => {}}
-        isActive={false}
+        onClick={() => navigate('/ai-chat')}
+        isActive={isActive('/ai-chat')}
       />
       <Icon
         icon={<SlCalender className="text-xl" />}

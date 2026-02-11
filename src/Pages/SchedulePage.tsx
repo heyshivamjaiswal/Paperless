@@ -7,6 +7,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useTasksStore, type Task } from '../store/taskStore';
 import { HiPlus, HiX, HiCheck, HiTrash } from 'react-icons/hi';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const locales = {
   'en-US': enUS,
 };
@@ -36,7 +38,7 @@ function SchedulePage() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/tasks', {
+        const res = await fetch(`${API_BASE}/api/tasks`, {
           credentials: 'include',
         });
         if (!res.ok) {
@@ -77,7 +79,7 @@ function SchedulePage() {
     if (!newTask.title.trim() || !selectedDate) return;
 
     try {
-      const res = await fetch('http://localhost:3000/api/tasks', {
+      const res = await fetch(`${API_BASE}/api/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -102,7 +104,7 @@ function SchedulePage() {
 
   const handleToggleComplete = async (task: Task) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+      const res = await fetch(`${API_BASE}/api/tasks/${task._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -119,7 +121,7 @@ function SchedulePage() {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+      const res = await fetch(`${API_BASE}/api/tasks/${taskId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

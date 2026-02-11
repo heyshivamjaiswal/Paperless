@@ -3,8 +3,12 @@ import { GoSidebarCollapse, GoSidebarExpand } from 'react-icons/go';
 import { useOpen } from '../../store/sidebarCollapse';
 import Tooltip from '../helperComponent/Tooltip';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthCheck } from '../../hooks/UseAuthCheck';
+import { usePagesStore } from '../../store/pageStore';
+import { useTasksStore } from '../../store/taskStore';
+import { useAIStore } from '../../store/Aistore';
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 interface SidebarHeaderProps {
   onMenuToggle?: (isOpen: boolean) => void;
@@ -13,7 +17,6 @@ interface SidebarHeaderProps {
 function SidebarHeader({ onMenuToggle }: SidebarHeaderProps) {
   const toggleBtn = useOpen((s) => s.toggle);
   const open = useOpen((s) => s.open);
-  const navigate = useNavigate();
 
   const { user } = useAuthCheck();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,13 +32,38 @@ function SidebarHeader({ onMenuToggle }: SidebarHeaderProps) {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:3000/api/auth/logout', {
+      setMenuOpen(false);
+
+      // Call logout API
+      await fetch(`${API_BASE}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });
-      navigate('/auth', { replace: true });
+
+      // CRITICAL: Clear ALL Zustand stores
+      usePagesStore.getState().setPages([]);
+      useTasksStore.getState().setTasks([]);
+      useAIStore.getState().clearHistory();
+      useAIStore.getState().setApiKey(null);
+
+      // CRITICAL: Clear localStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // CRITICAL: Hard redirect to force full reset
+      window.location.href = '/auth';
     } catch (error) {
       console.error('Logout error:', error);
+
+      // Even if API fails, clear everything and redirect
+      usePagesStore.getState().setPages([]);
+      useTasksStore.getState().setTasks([]);
+      useAIStore.getState().clearHistory();
+      useAIStore.getState().setApiKey(null);
+      localStorage.clear();
+      sessionStorage.clear();
+
+      window.location.href = '/auth';
     }
   };
 
