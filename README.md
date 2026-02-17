@@ -1,73 +1,107 @@
-# React + TypeScript + Vite
+# Paperless
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal workspace for writing, thinking and organizing — without the productivity noise.
 
-Currently, two official plugins are available:
+Paperless combines a clean block-based editor, an AI assistant, and a simple task scheduler into one focused environment.
+The goal is not to add more tools, but to remove context-switching while working.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### You open it → write → think → plan → continue.
+---
+## Live Demo
 
-## React Compiler
+Frontend:
+https://heyshivam-six.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Backend API: https://paperless-backend-49p8.onrender.com
 
-## Expanding the ESLint configuration
+---
+## Features
+#### Writing
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* Block-based editor
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* Multiple documents
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* Instant saving
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* Clean navigation
+
+#### AI Assistant
+
+* Built-in chat inside the workspace
+
+* Ask questions without leaving your notes
+
+* Brainstorming & study help
+
+#### Tasks & Calendar
+
+* Schedule tasks
+
+* Lightweight planning
+
+* Simple date-based organization
+
+## Tech Stack
+
+#### Frontend
+
+* React
+
+* TypeScript
+
+* Zustand
+
+* BlockNote
+
+* Framer Motion
+
+* TailwindCSS
+
+* Vite
+
+#### Backend
+
+* Node.js
+
+* Express
+
+* MongoDB
+
+#### AI
+
+* Groq API
+
+---
+
+Environment Variables
 ```
+Frontend .env
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+VITE_API_BASE_URL=<ADD_BACKEND_URL_HERE>
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+Backend .env
+
+```
+MONGO_URI=<YOUR_DB_URI>
+GROQ_API_KEY=<YOUR_GROQ_KEY>
+JWT_SECRET=<YOUR_SECRET>
+```
+```
+Running Locally
+git clone https://github.com/your-username/paperless.git
+cd paperless
+npm install
+npm run dev
+```
+Why this exists
+
+Switching between apps breaks focus:
+notes → search → AI → tasks → back to notes.
+
+Paperless keeps them in one place so the flow stays uninterrupted.
+
+### Author
+
+#### Built by Shivam
