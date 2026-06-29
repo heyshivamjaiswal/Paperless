@@ -1,4 +1,3 @@
-/
 export async function getGroqCompletion(
   prompt: string,
   apiKey: string,
@@ -18,7 +17,7 @@ export async function getGroqCompletion(
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-oss-120b', 
+          model: 'openai/gpt-oss-120b',
           messages,
           temperature: 0.7,
           max_tokens: 2000,
@@ -46,7 +45,6 @@ export async function getGroqCompletion(
     };
   }
 }
-
 
 export async function fixTextWithAI(
   text: string,
