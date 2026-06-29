@@ -1,6 +1,4 @@
-/**
- * Call Groq API for AI responses
- */
+/
 export async function getGroqCompletion(
   prompt: string,
   apiKey: string,
@@ -20,7 +18,7 @@ export async function getGroqCompletion(
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-oss-120b', // Fast and good quality
+          model: 'openai/gpt-oss-120b', 
           messages,
           temperature: 0.7,
           max_tokens: 2000,
@@ -49,9 +47,7 @@ export async function getGroqCompletion(
   }
 }
 
-/**
- * Quick grammar/suggestion fix for selected text
- */
+
 export async function fixTextWithAI(
   text: string,
   apiKey: string,

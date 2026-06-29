@@ -253,7 +253,6 @@ export default function BlockEditor() {
 
       try {
         if (pageId === 'new') {
-          // FIXED: Removed "http://localhost:3000" - only use API_BASE
           const res = await fetch(`${API_BASE}/api/docs`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
